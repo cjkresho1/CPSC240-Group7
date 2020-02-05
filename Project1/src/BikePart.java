@@ -1,5 +1,5 @@
 /**
- * @author Charles Kresho
+ * @author Charles Kresho, Anna Totten
  * Section number: 16221, 11am MW
  * 
  * I hereby declare upon my word of honor that I have neither given nor received unauthorized help with this assignment.
