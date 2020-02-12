@@ -1,133 +1,100 @@
-/**
- * @author Charles Kresho, Anna Totten, Mary Wells
- * Section number: 16221, 11am MW
- * 
- * I hereby declare upon my word of honor that I have neither given nor received unauthorized help with this assignment.
- */
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Scanner;
 
-public class BikePart 
-{
-	String partName;
-	int partNum;
-	double price;
-	double salePrice;
-	boolean onSale;
-	
-	/**
-	 * 
-	 * @param name The name of the part
-	 * @param num The number of the part
-	 * @param _price The price of the part
-	 * @param _salePrice The price of the part when onSale is true
-	 * @param sale True if the part is on sale, false otherwise
-	 */
-	public BikePart(String name, int num, double _price, double _salePrice, boolean sale)
-	{
-		partName = name;
-		partNum = num;
-		price = _price;
-		salePrice = _salePrice;
-		onSale = sale;
-	}
-	
-	
-	/**
-	 * @return the partName
-	 */
-	public String getPartName() 
-	{
-		return partName;
-	}
+public class BikePart {
+    /**
+     * Constructs a BikePart object
+     *
+     * @param name the name of the bike
+     * @param number the serial number of the bike
+     * @param listPrice the list price of the bike
+     * @param salesPrice the price of the bike if it is on sale
+     * @param sale whether the bike is on sale or not
+     * @author Anna Totten
+     */
+    String name;
+    int number;
+    double listPrice;
+    double salesPrice;
+    boolean sale;
+    int quantity;
 
-	/**
-	 * @param partName the partName to set
-	 */
-	public void setPartName(String partName) 
-	{
-		this.partName = partName;
-	}
+    public BikePart(String name, int number, double listPrice, double salesPrice, boolean sale, int quantity) {
+        this.name = name;
+        this.number = number;
+        this.listPrice = listPrice;
+        this.salesPrice = salesPrice;
+        this.sale = sale;
+        this.quantity = quantity;
+    }
 
-	/**
-	 * @return the partNum
-	 */
-	public int getPartNum() 
-	{
-		return partNum;
-	}
+    /**
+     *
+     * @return the name of the bike
+     */
+    public String getName() {
+        return this.name;
+    }
 
-	/**
-	 * @param partNum the partNum to set
-	 */
-	public void setPartNum(int partNum) 
-	{
-		this.partNum = partNum;
-	}
+    public void setName(String newName) {
+        this.name = newName;
+    }
 
-	/**
-	 * @return the price
-	 */
-	public double getPrice() 
-	{
-		return price;
-	}
+    /**
+     *
+     * @return the serial number of the bike
+     */
+    public int getNumber() {
+        return this.number;
+    }
 
-	/**
-	 * @param price the price to set
-	 */
-	public void setPrice(double price) 
-	{
-		this.price = price;
-	}
+    public void setNumber(int newNumber) {
+        this.number = newNumber;
+    }
 
-	/**
-	 * @return the salePrice
-	 */
-	public double getSalePrice() 
-	{
-		return salePrice;
-	}
+    /**
+     *
+     * @return the list price of the bike
+     */
+    public double getListPrice() {
+        return this.listPrice;
+    }
 
-	/**
-	 * @param salePrice the salePrice to set
-	 */
-	public void setSalePrice(double salePrice) 
-	{
-		this.salePrice = salePrice;
-	}
+    public void setListPrice(double newListPrice) {
+        this.listPrice = newListPrice;
+    }
 
-	/**
-	 * @return the onSale
-	 */
-	public boolean isOnSale() 
-	{
-		return onSale;
-	}
+    /**
+     *
+     * @return the price of the bike if it is on sale
+     */
+    public double getSalesPrice() {
+        return this.salesPrice;
+    }
 
-	/**
-	 * @param onSale the onSale to set
-	 */
-	public void setOnSale(boolean onSale) 
-	{
-		this.onSale = onSale;
-	}
-	
-	/**
-	 * Prints a String representation of the BikePart in the following format:
-	 * partName,partNumber,price,salesPrice,onSale
-	 * @return A string representation of the BikePart
-	 */
-	public String toString()
-	{
-		String val = String.format("%s,%d,%.2f,%.2f,", partName, partNum, price, salePrice);
-		
-		if (onSale)
-		{
-			val = val + "true";
-		}
-		else
-		{
-			val = val + "false";
-		}
-		return val;
-	}
+    public void setSalesPrice(double newSalesPrice) {
+        this.salesPrice = newSalesPrice;
+    }
+
+    /**
+     *
+     * @return whether the bike is on sale or not
+     */
+    public boolean getSale() {
+        return this.sale;
+    }
+
+    public void setSale(boolean newSale) {
+        this.sale = newSale;
+    }
+
+    public int getQuantity() { return this.quantity; }
+
+    public void setQuantity(int newQuantity) { this.quantity = newQuantity; }
 }
