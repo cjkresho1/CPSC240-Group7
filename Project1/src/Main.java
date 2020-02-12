@@ -4,9 +4,21 @@ import java.util.*;
 import java.util.Date;
 
 public class Main {
+	
     ArrayList<BikePart> Warehouse = new ArrayList<>();
 
-    public void read() {
+    public void run()
+    {
+    	while(true)
+    		displayUI();
+    }
+    
+    /**
+     * Gets a filename and creates BikeParts from the lines in the text file, then adds them to the array list.
+     * If the BikePart already exists, update quantity.
+     * If the textfile doesn't exist, print that and exit the method.
+     */
+    private void read() {
         Scanner in = new Scanner(System.in);
         System.out.println("Enter file name: ");
         String fileName = in.nextLine();
@@ -123,5 +135,24 @@ public class Main {
             if (reference == null) {
                 System.out.println("That bike part does not exist!");
             }
+            
+    }
+    
+    private void quit()
+    {
+    	//Output data to text file
+    	
+    	System.exit(0);
+    }
+    
+    private void displayUI()
+    {
+    	//Print out user options
+    	
+    	//Get user input
+    	
+    	//Call respective method
+    	
+    	//exit
     }
 }
