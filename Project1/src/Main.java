@@ -4,6 +4,7 @@ import java.util.*;
 import java.util.Date;
 
 public class Main {
+    ArrayList<BikePart> Warehouse = new ArrayList<>();
 
     public void read() {
         Scanner in = new Scanner(System.in);
