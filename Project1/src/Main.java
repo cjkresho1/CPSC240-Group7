@@ -78,17 +78,21 @@ public class Main
         in.close();
     }
 
+    /**
+     * Prompts the user to enter the information for a BikePart, then adds it to the warehouse.
+     */
     public void add()
     {
         Scanner x = new Scanner(System.in);
         System.out.println(
-                "Enter your bike part name, list price, sale price, whether it is on sale or not, and the quantity of bike parts you want to enter: ");
+                "Enter your bike part name, list price, sale price, whether it is on sale or not, and the quantity of "
+                + "bike parts you want to enter: ");
         try
         {
-            String newBikePart = x.nextLine();
+            String newBikePart = x.next();
             String[] pv = newBikePart.split(",");
             BikePart bp = new BikePart(pv[0], Integer.parseInt(pv[1]), Double.parseDouble(pv[2]),
-                    Double.parseDouble(pv[3]), Boolean.parseBoolean(pv[4]), Integer.parseInt(pv[4]));
+                    Double.parseDouble(pv[3]), Boolean.parseBoolean(pv[4]), Integer.parseInt(pv[5]));
             boolean existingPart = false;
             for (BikePart y : Warehouse)
             {
@@ -99,7 +103,7 @@ public class Main
                     y.setListPrice(bp.getListPrice());
                     y.setSalesPrice(bp.getSalesPrice());
                     y.setSale(bp.getSale());
-                    y.setQuantity((y.getQuantity() + 1));
+                    y.setQuantity((y.getQuantity() + bp.getQuantity()));
                 }
             }
             if (existingPart == false)
@@ -111,6 +115,12 @@ public class Main
         {
             System.out.println("Inadequate info!");
         }
+        catch(Exception e)
+        {
+            System.out.println("Incorrect data entered.");
+        }
+        
+        x.close();
     }
 
     public void Sell()
