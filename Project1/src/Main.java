@@ -81,7 +81,7 @@ public class Main
     /**
      * Prompts the user to enter the information for a BikePart, then adds it to the warehouse.
      */
-    public void add()
+    private void add()
     {
         Scanner x = new Scanner(System.in);
         System.out.println(
@@ -123,7 +123,10 @@ public class Main
         x.close();
     }
 
-    public void Sell()
+    /**
+     * Prompt the user for a part number, and attempt to sell a part matching that number.
+     */
+    private void sell()
     {
         Scanner x = new Scanner(System.in);
         System.out.println("Enter bike part number: ");
@@ -135,31 +138,46 @@ public class Main
             {
                 if (y.getNumber() == number)
                 {
+                    //If the BikePart exists, but has no quantity in stock, print message then exit method.
+                    if (y.getQuantity() == 0)
+                    {
+                        System.out.println("That bike part isn't in stock!");
+                        x.close();
+                        return;
+                    }
                     y.setQuantity((y.getQuantity() - 1));
                     reference = y;
                 }
             }
+            //If the bike part trying to be sold doesn't exist, print message then exit method.
             if (reference == null)
             {
                 System.out.println("That bike part does not exist!");
+                x.close();
+                return;
             }
-            double price = 0.0;
-            if (reference.getSale() == true)
-            {
-                price = reference.getSalesPrice();
-            }
-            else if (reference.getSale() == false)
-            {
-                price = reference.getListPrice();
-            }
+            
+            //The bike part exists, so print the sales message
+            double price = reference.getPrice();
             Date date = new Date();
-            String retValue = reference.getName() + ", " + price + ", " + reference.getSale() + ", " + date.toString();
+            String retValue = "Part Name: " + reference.getName() + "\nPart price: " + price;
+            if (reference.getSale())
+            {
+                retValue = retValue + "\nPart was on sale!";
+            }
+            else
+            {
+                retValue = retValue + "\nPart was not on sale.";
+            }
+            retValue = retValue + "\nSold at: " + date.toString();
             System.out.println(retValue);
         }
-        catch (InputMismatchException e)
+        catch (Exception e)
         {
-            System.exit(0);
+            System.out.println("Incorrect data entered.");
         }
+        
+        x.close();
     }
 
     public void Display()
