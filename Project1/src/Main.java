@@ -20,11 +20,37 @@ public class Main
                 "sortname",
                 "sortnumber",
                 "quit"};
-
+    private static final String DB_FILE_NAME = "warehouseDB.txt";
+    
     public void run()
     {
         run = true;
         warehouse = new ArrayList<>();
+        
+        //Import data from the database file
+        try
+        {
+            File dbFile = new File(DB_FILE_NAME);
+            Scanner dbScan = new Scanner(dbFile);
+            
+            while(dbScan.hasNext())
+            {
+                String line = dbScan.next();
+                String[] pv = line.split(",");
+                //Create new bike part from the ',' delimited line
+                BikePart bp = new BikePart(pv[0], Integer.parseInt(pv[1]), Double.parseDouble(pv[2]),
+                        Double.parseDouble(pv[3]), Boolean.parseBoolean(pv[4]), Integer.parseInt(pv[5]));
+                
+                warehouse.add(bp);
+            }
+            
+            dbScan.close();
+        }
+        catch (FileNotFoundException e)
+        {
+            //This just means that there was no database to construct from, move along.
+        }
+        
         userIn = new Scanner(System.in);
         while (run)
             displayUI();
