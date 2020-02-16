@@ -288,7 +288,7 @@ public class Main
             
             for(BikePart part : warehouse)
             {
-                dbWriter.write(part.toString());
+                dbWriter.write(part.toString() + "\n");
             }
             
             dbWriter.close();
