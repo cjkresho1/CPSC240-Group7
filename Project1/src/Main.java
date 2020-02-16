@@ -1,5 +1,7 @@
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.*;
 import java.util.Date;
 
@@ -267,9 +269,39 @@ public class Main
     
     private void quit()
     {
-        // Output data to text file
-
-        System.exit(0);
+        run = false;
+        
+        File dbFile = new File(DB_FILE_NAME);
+        
+        try
+        {
+            if (dbFile.exists())
+            {
+                dbFile.delete();
+            }
+            
+            dbFile.createNewFile();
+            FileWriter dbWriter = new FileWriter(dbFile);
+            
+            for(BikePart part : warehouse)
+            {
+                dbWriter.write(part.toString());
+            }
+            
+            dbWriter.close();
+        }
+        catch(FileNotFoundException e)
+        {
+            System.err.println("Database file couldn't be created! Data will be lost!");
+            e.printStackTrace();
+            System.exit(1);
+        }
+        catch(IOException e)
+        {
+            System.err.println("Couldn't write to database file, data will be lost!");
+            e.printStackTrace();
+            System.exit(1);
+        }
     }
 
     private void displayUI()
