@@ -55,7 +55,10 @@ public class Main
         
         userIn = new Scanner(System.in);
         while (run)
+        {
             displayUI();
+            System.out.print("\n");
+        }
         
         userIn.close();
     }
@@ -89,7 +92,7 @@ public class Main
                 {
                     //If a part with the same name already exists, update all the information about the part from the 
                     //new part.
-                    if (x.getName() == bp.getName())
+                    if (x.getName().contentEquals(bp.getName()))
                     {
                         existingFile = true;
                         x.setNumber(bp.getNumber());
@@ -134,7 +137,7 @@ public class Main
             boolean existingPart = false;
             for (BikePart y : warehouse)
             {
-                if (y.getName() == bp.getName())
+                if (y.getName().equals(bp.getName()))
                 {
                     existingPart = true;
                     y.setNumber(bp.getNumber());
@@ -221,10 +224,10 @@ public class Main
         BikePart reference = null;
         for (BikePart y : warehouse)
         {
-            if (y.getName() == name)
+            if (y.getName().equals(name))
             {
                 reference = y;
-                System.out.println("Part Name: " + y.getName() + "\n Part Price: " + y.getPrice());
+                System.out.println("Part Name: " + y.getName() + "\nPart Price: " + y.getPrice());
             }
         }
         if (reference == null)
@@ -329,6 +332,7 @@ public class Main
                 break;
             }
         }
+        System.out.print("\n");
         // Call respective method
         switch(choice)
         {
