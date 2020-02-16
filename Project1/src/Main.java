@@ -180,33 +180,29 @@ public class Main
         x.close();
     }
 
-    public void Display()
+    /**
+     * Prompt the user for a part name, then print the name and current price for the part.
+     */
+    private void display()
     {
         Scanner x = new Scanner(System.in);
         System.out.println("Enter bike part name: ");
-        String name = x.nextLine();
+        String name = x.next();
         BikePart reference = null;
-        double price = 0.0;
         for (BikePart y : Warehouse)
         {
             if (y.getName() == name)
             {
                 reference = y;
-                if (y.getSale() == true)
-                {
-                    price = y.getSalesPrice();
-                }
-                else if (y.getSale() == false)
-                {
-                    price = y.getListPrice();
-                }
-                System.out.println(y.getName() + ", " + price);
+                System.out.println("Part Name: " + y.getName() + "\n Part Price: " + y.getPrice());
             }
         }
         if (reference == null)
         {
             System.out.println("That bike part does not exist!");
         }
+        
+        x.close();
     }
 
     private void quit()
