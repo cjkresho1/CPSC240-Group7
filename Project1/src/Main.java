@@ -170,7 +170,8 @@ public class Main
         System.out.println("Enter bike part number: ");
         try
         {
-            int number = userIn.nextInt();
+            String numberStr = userIn.next();
+            int number = Integer.parseInt(numberStr);
             BikePart reference = null;
             for (BikePart y : warehouse)
             {
