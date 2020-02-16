@@ -205,6 +205,40 @@ public class Main
         }
     }
 
+    /**
+     * Sorts the warehouse by part name, then prints the contents
+     */
+    private void sortName()
+    {
+        warehouse.sort(new StringComparator());
+        
+        printWarehouse();
+    }
+    
+    /**
+     * Sorts the warehouse by part number, then prints the contents
+     */
+    private void sortNumber()
+    {
+        warehouse.sort(new IntegerComparator());
+        
+        printWarehouse();
+    }
+    
+    /**
+     * Prints the contents of the warehouse to System.out in the following format:
+     * name,number,listPrice,salesPrice,sale,quantity
+     */
+    private void printWarehouse()
+    {
+        for (BikePart part : warehouse)
+        {
+            //TODO change this print statemenet to look pretty
+            System.out.println(part.toString());
+        }
+    }
+    
+    
     private void quit()
     {
         // Output data to text file
