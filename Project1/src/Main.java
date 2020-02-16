@@ -233,7 +233,7 @@ public class Main
     {
         for (BikePart part : warehouse)
         {
-            //TODO change this print statemenet to look pretty
+            //TODO change this print statement to look pretty
             System.out.println(part.toString());
         }
     }
