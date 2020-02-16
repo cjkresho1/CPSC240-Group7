@@ -24,6 +24,9 @@ public class Main
                 "quit"};
     private static final String DB_FILE_NAME = "warehouseDB.txt";
     
+    /**
+     * Call to start the entire program, including initializing the warehouse, and starting the user interface
+     */
     public void run()
     {
         run = true;
@@ -270,7 +273,9 @@ public class Main
         }
     }
     
-    
+    /**
+     * Exits the program. Writes the existing warehouse to the database file
+     */
     private void quit()
     {
         run = false;
@@ -308,6 +313,9 @@ public class Main
         }
     }
 
+    /**
+     * Prints out the UI menu options, and processes the input.
+     */
     private void displayUI()
     {
         // Print out user options

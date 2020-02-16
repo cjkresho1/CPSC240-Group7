@@ -1,5 +1,17 @@
+/**
+ * Holds the information important to a Bike Part
+ * @author Anna Totten
+ */
 public class BikePart
 {
+    
+    String name;
+    int number;
+    double listPrice;
+    double salesPrice;
+    boolean sale;
+    int quantity;
+
     /**
      * Constructs a BikePart object
      *
@@ -9,15 +21,7 @@ public class BikePart
      * @param salesPrice the price of the bike part if it is on sale
      * @param sale       whether the bike part is on sale or not
      * @param quantity   the quantity of bike parts
-     * @author Anna Totten
      */
-    String name;
-    int number;
-    double listPrice;
-    double salesPrice;
-    boolean sale;
-    int quantity;
-
     public BikePart(String name, int number, double listPrice, double salesPrice, boolean sale, int quantity)
     {
         this.name = name;
@@ -93,7 +97,7 @@ public class BikePart
 
     /**
      * Set the sale price of the bike
-     * @param newSalesPrice
+     * @param newSalesPrice Sales Price to be set
      */
     public void setSalesPrice(double newSalesPrice)
     {
