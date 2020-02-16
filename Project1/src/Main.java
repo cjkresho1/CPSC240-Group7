@@ -10,12 +10,26 @@ import java.util.Date;
  */
 public class Main
 {
-    ArrayList<BikePart> Warehouse = new ArrayList<>();
+    private ArrayList<BikePart> warehouse;
+    private Scanner userIn;
+    private boolean run;
+    private static final String CHOICES[] = {"read",
+                "enter",
+                "sell",
+                "display",
+                "sortname",
+                "sortnumber",
+                "quit"};
 
     public void run()
     {
-        while (true)
+        run = true;
+        warehouse = new ArrayList<>();
+        userIn = new Scanner(System.in);
+        while (run)
             displayUI();
+        
+        userIn.close();
     }
 
     /**
@@ -25,9 +39,8 @@ public class Main
      */
     private void read()
     {
-        Scanner in = new Scanner(System.in);
         System.out.println("Enter file name: ");
-        String fileName = in.next();
+        String fileName = userIn.next();
         File file = new File(fileName);
         
         //If the text file doesn't exist, print error message and exist method
@@ -44,7 +57,7 @@ public class Main
                 //Create new bike part from the ',' delimited line
                 BikePart bp = new BikePart(pv[0], Integer.parseInt(pv[1]), Double.parseDouble(pv[2]),
                         Double.parseDouble(pv[3]), Boolean.parseBoolean(pv[4]), Integer.parseInt(pv[5]));
-                for (BikePart x : Warehouse)
+                for (BikePart x : warehouse)
                 {
                     //If a part with the same name already exists, update all the information about the part from the 
                     //new part.
@@ -62,7 +75,7 @@ public class Main
                 //If the part didn't exist, add it to the warehouse.
                 if (existingFile == false)
                 {
-                    Warehouse.add(bp);
+                    warehouse.add(bp);
                 }
                 
                 existingFile = false;
@@ -74,8 +87,6 @@ public class Main
         {
             System.out.println("File not found!");
         }
-        
-        in.close();
     }
 
     /**
@@ -83,18 +94,17 @@ public class Main
      */
     private void add()
     {
-        Scanner x = new Scanner(System.in);
         System.out.println(
                 "Enter your bike part name, list price, sale price, whether it is on sale or not, and the quantity of "
                 + "bike parts you want to enter: ");
         try
         {
-            String newBikePart = x.next();
+            String newBikePart = userIn.next();
             String[] pv = newBikePart.split(",");
             BikePart bp = new BikePart(pv[0], Integer.parseInt(pv[1]), Double.parseDouble(pv[2]),
                     Double.parseDouble(pv[3]), Boolean.parseBoolean(pv[4]), Integer.parseInt(pv[5]));
             boolean existingPart = false;
-            for (BikePart y : Warehouse)
+            for (BikePart y : warehouse)
             {
                 if (y.getName() == bp.getName())
                 {
@@ -108,7 +118,7 @@ public class Main
             }
             if (existingPart == false)
             {
-                Warehouse.add(bp);
+                warehouse.add(bp);
             }
         }
         catch (IllegalArgumentException e)
@@ -119,8 +129,6 @@ public class Main
         {
             System.out.println("Incorrect data entered.");
         }
-        
-        x.close();
     }
 
     /**
@@ -128,13 +136,12 @@ public class Main
      */
     private void sell()
     {
-        Scanner x = new Scanner(System.in);
         System.out.println("Enter bike part number: ");
         try
         {
-            int number = x.nextInt();
+            int number = userIn.nextInt();
             BikePart reference = null;
-            for (BikePart y : Warehouse)
+            for (BikePart y : warehouse)
             {
                 if (y.getNumber() == number)
                 {
@@ -142,7 +149,6 @@ public class Main
                     if (y.getQuantity() == 0)
                     {
                         System.out.println("That bike part isn't in stock!");
-                        x.close();
                         return;
                     }
                     y.setQuantity((y.getQuantity() - 1));
@@ -153,7 +159,6 @@ public class Main
             if (reference == null)
             {
                 System.out.println("That bike part does not exist!");
-                x.close();
                 return;
             }
             
@@ -176,8 +181,6 @@ public class Main
         {
             System.out.println("Incorrect data entered.");
         }
-        
-        x.close();
     }
 
     /**
@@ -185,11 +188,10 @@ public class Main
      */
     private void display()
     {
-        Scanner x = new Scanner(System.in);
         System.out.println("Enter bike part name: ");
-        String name = x.next();
+        String name = userIn.next();
         BikePart reference = null;
-        for (BikePart y : Warehouse)
+        for (BikePart y : warehouse)
         {
             if (y.getName() == name)
             {
@@ -201,8 +203,6 @@ public class Main
         {
             System.out.println("That bike part does not exist!");
         }
-        
-        x.close();
     }
 
     private void quit()
@@ -215,11 +215,55 @@ public class Main
     private void displayUI()
     {
         // Print out user options
-
+        System.out.println(
+                "Please select your option from the following menu:\n" + 
+                "Read: Read an inventory delivery file\n" + 
+                "Enter: Enter a part\n" + 
+                "Sell: Sell a part\n" + 
+                "Display: Display a part\n" + 
+                "SortName: Sort parts by part name\n" + 
+                "SortNumber: Sort parts by part number\n" + 
+                "Quit: Close the program\n" + 
+                "Enter your choice:"
+                );
         // Get user input
-
+        String input = userIn.next();
+        int choice = -1;
+        for (int i = 0; i < CHOICES.length; i++)
+        {
+            if (CHOICES[i].equalsIgnoreCase(input))
+            {
+                choice = i;
+                break;
+            }
+        }
         // Call respective method
-
-        // exit
+        switch(choice)
+        {
+        case 0:
+            read();
+            break;
+        case 1: 
+            add();
+            break;
+        case 2:
+            sell();
+            break;
+        case 3: 
+            display();
+            break;
+        case 4:
+            sortName();
+            break;
+        case 5:
+            sortNumber();
+            break;
+        case 6:
+            quit();
+            break;
+        default:
+            System.out.println("That didn't match any option, please try again.");
+            break;
+        }
     }
 }
