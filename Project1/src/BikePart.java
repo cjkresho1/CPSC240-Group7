@@ -152,7 +152,7 @@ public class BikePart
     
     /**
      * Prints a String representation of the BikePart in the following format:
-     * names,number,listPrice,salesPrice,sale,quantity
+     * name,number,listPrice,salesPrice,sale,quantity
      * @return A string representation of the BikePart
      */
     public String toString()
