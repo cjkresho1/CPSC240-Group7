@@ -1,0 +1,3 @@
+TestPart,123456,56.49,44.89,false,67
+TestBikePart,654321,30.00,15.00,true,15
+EvilBikePart,87878,66.00,33.00,false,66
