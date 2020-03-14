@@ -16,7 +16,7 @@ public class Main
 {
 	private static final String MAIN_NAME = "mainWarehouse";
     private static final String DB_FILE_NAME = "mainWarehouse.warehouse.txt";
-    private static final String FILE_MODIFIER = "warehouse.txt";
+    private static final String FILE_MODIFIER = ".warehouse.txt";
     private Warehouse mainWarehouse;
     private ArrayList<Warehouse> vans;
     private Scanner userIn;
