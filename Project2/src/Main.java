@@ -2,23 +2,17 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Scanner;
+import java.util.*;
+import java.util.Date;
 
 /**
- * Provides the main control structure for the project. Contains the main Warehouse
- * and a list of Van Warehouses, and handles all user I/O.
+ * Provides the main control structure for the project. Contains an ArrayList that acts as the warehouse for bike parts.
  * @author Charles, Libbie, Anna Totten
  *
  */
 public class Main
 {
-	private static final String MAIN_NAME = "mainWarehouse";
-    private static final String DB_FILE_NAME = "mainWarehouse.warehouse.txt";
-    private static final String FILE_MODIFIER = ".warehouse.txt";
-    private Warehouse mainWarehouse;
-    private ArrayList<Warehouse> vans;
+    private ArrayList<BikePart> warehouse;
     private Scanner userIn;
     private boolean run;
     private static final String CHOICES[] = {"read",
@@ -27,128 +21,49 @@ public class Main
                 "display",
                 "sortname",
                 "sortnumber",
-                "addvan",
-                "transfer",
                 "quit"};
+    private static final String DB_FILE_NAME = "warehouseDB.txt";
     
     /**
      * Call to start the entire program, including initializing the warehouse, and starting the user interface
      */
     public void run()
     {
-    	mainWarehouse = new Warehouse(MAIN_NAME);
-    	vans = new ArrayList<Warehouse>();
-    	userIn = new Scanner(System.in);
-    	run = true;
-    	
-    	/*
-    	 * Import existing Warehouse and Vans from files.
-    	 * Warehouse file to be: "warehouseDB.txt", specified by DB_FILE_NAME
-    	 * Van files to be: "Van" + [van number] ex: Van1, Van2, Van3...Van[n] for n vans
-    	 * Delete files after import.
-    	 */
-    	
-    	importData();
-    	
-    	//Enter control loop, until user chooses to exit
-    	while(run)
-    	{
-    		displayUI();
-    		System.out.print("\n");
-    	}
-    	
-    	userIn.close();
-    }
-    
-    /**
-     * Helper method to run(). Imports existing data from text files before run.
-     */
-    private void importData()
-    {
-    	/*
-    	 * IMPORTANT: This string contains the absolute file path to the directory
-    	 * the application was run in. Use it to walk the existing files in the 
-    	 * directory.
-    	 * 
-    	 * The following code creates a directory at the path, and gets a list of all
-    	 * files/directories in it. 
-    	 */
-    	String absolutePath = System.getProperty("user.dir");
-    	
-    	File curDirectory = new File(absolutePath);
-    	File[] files = null;
-    	
-    	if (curDirectory.isDirectory())
-    	{
-    		files = curDirectory.listFiles();
-    	}
-    	
-    	if (files == null)
-    	{
-    		System.err.println("Something went wrong reading the file structure.");
-    		System.exit(1);
-    	}
-    	
-    	//Get all .warehouse.txt files from the current directory, then create
-    	//Warehouse objects from them
-    	
-    	for (File curFile : files)
-    	{
-    		if (curFile.exists())
-    		{
-    			if (curFile.getName().contains(FILE_MODIFIER))
-    			{
-    				//File is a warehouse. Let's get that data
-    				
-    				/*
-    				 * This gets the name of the Warehouse. How does this work?
-    				 * A .warehouse.txt file has the following format dictated by the
-    				 * quit() method: "[warehouseName].warehouse.txt"
-    				 * This means that we can take a substring of the file name to 
-    				 * remove the trailing 14 characters, which will be the 
-    				 * ".warehouse.txt", leaving only [warehouesName].
-    				 */
-    				
-    				String fileName = curFile.getName();
-    				fileName = fileName.substring(0, fileName.length() - 14);
-    				Warehouse curWarehouse = new Warehouse(fileName);
-    				
-    				try
-    				{
-    					Scanner curScan = new Scanner(curFile);
-    					while(curScan.hasNext())
-    					{
-    						String line = curScan.next();
-    						String[] pv = line.split(",");
-    						//Create new bike part from the ',' delimited line
-    		                BikePart bp = new BikePart(pv[0], Integer.parseInt(pv[1]), Double.parseDouble(pv[2]),
-    		                        Double.parseDouble(pv[3]), Boolean.parseBoolean(pv[4]), Integer.parseInt(pv[5]));
-    		                
-    		                curWarehouse.add(bp);
-    					}
-    					
-    					curScan.close();
-    				}
-    				catch (FileNotFoundException e)
-    				{
-    					System.err.println("Somehow, the DB file that just existed "
-    							+ "doesn't exist anymore.");
-    					e.printStackTrace();
-    				}
-    				
-    				if (curWarehouse.getName().equals(MAIN_NAME))
-    				{
-    					mainWarehouse = curWarehouse;
-    				}
-    				else
-    				{
-    					vans.add(curWarehouse);
-    				}
-    				
-    				curFile.delete();
-    			}
-    		}
-    	}
+        run = true;
+        warehouse = new ArrayList<>();
+        
+        //Import data from the database file
+        try
+        {
+            File dbFile = new File(DB_FILE_NAME);
+            Scanner dbScan = new Scanner(dbFile);
+            
+            while(dbScan.hasNext())
+            {
+                String line = dbScan.next();
+                String[] pv = line.split(",");
+                //Create new bike part from the ',' delimited line
+                BikePart bp = new BikePart(pv[0], Integer.parseInt(pv[1]), Double.parseDouble(pv[2]),
+                        Double.parseDouble(pv[3]), Boolean.parseBoolean(pv[4]), Integer.parseInt(pv[5]));
+                
+                warehouse.add(bp);
+            }
+            
+            dbScan.close();
+        }
+        catch (FileNotFoundException e)
+        {
+            //This just means that there was no database to construct from, move along.
+        }
+        
+        userIn = new Scanner(System.in);
+        while (run)
+        {
+            displayUI();
+            System.out.print("\n");
+        }
+        
+        userIn.close();
     }
 
     /**
@@ -158,11 +73,54 @@ public class Main
      */
     private void read()
     {
-        //TODO finish read()
-    	
-    	//Get delivery filename, ensure the file exists. Exit if file doesn't exist
-    	
-    	//Read line by line to create new BikePart. Add bike parts to mainWarehouse
+        System.out.println("Enter file name: ");
+        String fileName = userIn.next();
+        File file = new File(fileName);
+        
+        //If the text file doesn't exist, print error message and exist method
+        try
+        {
+            boolean existingFile = false;
+            Scanner read = new Scanner(file);
+            
+            //Iterate over the text file's lines
+            while (read.hasNext())
+            {
+                String line = read.next();
+                String[] pv = line.split(",");
+                //Create new bike part from the ',' delimited line
+                BikePart bp = new BikePart(pv[0], Integer.parseInt(pv[1]), Double.parseDouble(pv[2]),
+                        Double.parseDouble(pv[3]), Boolean.parseBoolean(pv[4]), Integer.parseInt(pv[5]));
+                for (BikePart x : warehouse)
+                {
+                    //If a part with the same name already exists, update all the information about the part from the 
+                    //new part.
+                    if (x.getName().contentEquals(bp.getName()))
+                    {
+                        existingFile = true;
+                        x.setNumber(bp.getNumber());
+                        x.setListPrice(bp.getListPrice());
+                        x.setSalesPrice(bp.getSalesPrice());
+                        x.setSale(bp.getSale());
+                        x.setQuantity((x.getQuantity() + bp.getQuantity()));
+                    }
+                }
+                
+                //If the part didn't exist, add it to the warehouse.
+                if (existingFile == false)
+                {
+                    warehouse.add(bp);
+                }
+                
+                existingFile = false;
+            }
+            
+            read.close();
+        }
+        catch (FileNotFoundException e)
+        {
+            System.out.println("File not found!");
+        }
     }
 
     /**
@@ -170,11 +128,41 @@ public class Main
      */
     private void add()
     {
-    	//TODO finish add()
-    	
-    	//Interactively (field by field) prompt the user for each BikePart field
-    	
-    	//Create new BikePart from information and add it to the mainWarehouse
+        System.out.println(
+                "Enter your bike part name, list price, sale price, whether it is on sale or not, and the quantity of "
+                + "bike parts you want to enter: ");
+        try
+        {
+            String newBikePart = userIn.next();
+            String[] pv = newBikePart.split(",");
+            BikePart bp = new BikePart(pv[0], Integer.parseInt(pv[1]), Double.parseDouble(pv[2]),
+                    Double.parseDouble(pv[3]), Boolean.parseBoolean(pv[4]), Integer.parseInt(pv[5]));
+            boolean existingPart = false;
+            for (BikePart y : warehouse)
+            {
+                if (y.getName().equals(bp.getName()))
+                {
+                    existingPart = true;
+                    y.setNumber(bp.getNumber());
+                    y.setListPrice(bp.getListPrice());
+                    y.setSalesPrice(bp.getSalesPrice());
+                    y.setSale(bp.getSale());
+                    y.setQuantity((y.getQuantity() + bp.getQuantity()));
+                }
+            }
+            if (existingPart == false)
+            {
+                warehouse.add(bp);
+            }
+        }
+        catch (IllegalArgumentException e)
+        {
+            System.out.println("Inadequate info!");
+        }
+        catch(Exception e)
+        {
+            System.out.println("Incorrect data entered.");
+        }
     }
 
     /**
@@ -182,17 +170,52 @@ public class Main
      */
     private void sell()
     {
-    	//TODO finish sell()
-    	
-    	//Get number of a BikePart from the user
-    	
-    	//Get warehouse that the user wants to sell from. 
-    	
-    	/*
-    	 * If the BikePart exists in the warehouse, sell one and display the part
-    	 * name, part cost, and the time the part was sold CLEANLY. Otherwise, print 
-    	 * error message and exit method.
-    	 */
+        System.out.println("Enter bike part number: ");
+        try
+        {
+            String numberStr = userIn.next();
+            int number = Integer.parseInt(numberStr);
+            BikePart reference = null;
+            for (BikePart y : warehouse)
+            {
+                if (y.getNumber() == number)
+                {
+                    //If the BikePart exists, but has no quantity in stock, print message then exit method.
+                    if (y.getQuantity() == 0)
+                    {
+                        System.out.println("That bike part isn't in stock!");
+                        return;
+                    }
+                    y.setQuantity((y.getQuantity() - 1));
+                    reference = y;
+                }
+            }
+            //If the bike part trying to be sold doesn't exist, print message then exit method.
+            if (reference == null)
+            {
+                System.out.println("That bike part does not exist!");
+                return;
+            }
+            
+            //The bike part exists, so print the sales message
+            double price = reference.getPrice();
+            Date date = new Date();
+            String retValue = "Part Name: " + reference.getName() + "\nPart price: " + price;
+            if (reference.getSale())
+            {
+                retValue = retValue + "\nPart was on sale!";
+            }
+            else
+            {
+                retValue = retValue + "\nPart was not on sale.";
+            }
+            retValue = retValue + "\nSold at: " + date.toString();
+            System.out.println(retValue);
+        }
+        catch (Exception e)
+        {
+            System.out.println("Incorrect data entered.");
+        }
     }
 
     /**
@@ -200,11 +223,21 @@ public class Main
      */
     private void display()
     {
-    	//TODO finish display()
-    	
-    	//Get name of a BikePart from the user
-    	
-    	//If the part exists, print the part information CLEANLY. Otherwise print an error message and exit method
+        System.out.println("Enter bike part name: ");
+        String name = userIn.next();
+        BikePart reference = null;
+        for (BikePart y : warehouse)
+        {
+            if (y.getName().equals(name))
+            {
+                reference = y;
+                System.out.println("Part Name: " + y.getName() + "\nPart Price: " + y.getPrice());
+            }
+        }
+        if (reference == null)
+        {
+            System.out.println("That bike part does not exist!");
+        }
     }
 
     /**
@@ -212,16 +245,9 @@ public class Main
      */
     private void sortName()
     {
-    	//TODO sortName()
-    	
-    	/*
-    	 * Get whether the user wants to display the mainWarehouse, a van, or all of
-    	 * the existing inventory. 
-    	 */
-    	
-    	//Create temporary Warehouse object. Add all specified warehouses to it
-    	
-    	//Sort the temporary Warehouse, and print the parts CLEANLY
+        warehouse.sort(new StringComparator());
+        
+        printWarehouse();
     }
     
     /**
@@ -229,124 +255,44 @@ public class Main
      */
     private void sortNumber()
     {
-    	//TODO sortNumber()
-    	
-    	/*
-    	 * Get whether the user wants to display the mainWarehouse, a van, or all of
-    	 * the existing inventory. 
-    	 */
-    	
-    	//Create temporary Warehouse object. Add all specified warehouses to it
-    	
-    	//Sort the temporary Warehouse, and print the parts CLEANLY
-    }
-    
-    /**
-     * Add a new van to the fleet. Get the van name, then create a new empty van.
-     */
-    private void addVan()
-    {
-    	//TODO finish addVan()
-    	
-    	//Get the van name from the user.
-    	
-    	//Create a new Warehouse with the name, the add it to vans
-    }
-    
-    /**
-     * Transfer inventory between the warehouses and sales vans. Should use the 
-     * helper methods transferFromMain() and transferFromVan().
-     */
-    private void transfer()
-    {
-    	//TODO finish transfer()
-    	
-    	//Get transfer filename
-    	
-    	//read first line, determine if it's a transfer from the mainWarehouse or a 
-    	//sales van. Call appropriate helper method.
-    	
-    }
-    
-    /**
-     * Transfer parts between the mainWarehouse to a Van. Uses a text file.
-     * 
-     * First line of the transfer file should be:
-     * 		[mainWarehouseName],[destinationVanName]
-     * Other lines should be: 
-     * 		[bikePartName],[quantity]
-     * 
-     * Attempt to transfer the specified quantity of parts. If the quantity isn't
-     * available, //XXX SHOULD WE TRANSFER WHAT'S AVAILABLE, OR NOT TRANSFER ANY?
-     */
-    private void transferFromMain()
-    {
-    	//TODO finish transferFromMain()
-    	
-    	//get filename
-    	
-    	//read destination van, and requested BikeParts
-    	
-    	//Transfer BikeParts
-    }
-    
-    /**
-     * Transfer parts between the mainWarehouse to a Van. Uses a text file.
-     * 
-     * First line of the transfer file should be:
-     * 		[destinationVan],[sourceVan]
-     * Other lines should be: 
-     * 		[bikePartName],[quantity]
-     * 
-     * Attempt to transfer the specified quantity of parts. If the quantity isn't
-     * available, //XXX SHOULD WE TRANSFER WHAT'S AVAILABLE, OR NOT TRANSFER ANY?
-     */
-    private void transferFromVan()
-    {
-    	//TODO finish transferFromVan()
-    	
-    	//get filename
-    	
-    	//read source van, destination van, and requested BikeParts
-    	
-    	//Transfer BikeParts
+        warehouse.sort(new IntegerComparator());
+        
+        printWarehouse();
     }
     
     /**
      * Prints the contents of the warehouse to System.out in the following format:
      * name,number,listPrice,salesPrice,sale,quantity
      */
-    private void printWarehouse(Warehouse house)
+    private void printWarehouse()
     {
-    	//TODO finish printWarehouse()
-    	
-    	//Print the Warehouse inventory as is in a table format
+        for (BikePart part : warehouse)
+        {
+            //TODO change this print statement to look pretty
+            System.out.println(part.toString());
+        }
     }
     
-    /*
+    /**
      * Exits the program. Writes the existing warehouse to the database file
      */
     private void quit()
     {
-    	/*
-    	 * On exit, write existing Warehouse and Vans to files.
-    	 * Warehouse file to be: "warehouseDB.txt", specified by DB_FILE_NAME
-    	 * Van files to be: "Van" + [van number] EX: Van1, Van2, Van3...Van[n] for n vans
-    	 */
-    	
-    	//Create database file for the mainWarehouse
-    	File mainWarehouseFile = new File(DB_FILE_NAME);
-    	try
+        run = false;
+        
+        File dbFile = new File(DB_FILE_NAME);
+        
+        try
         {
-            if (mainWarehouseFile.exists())
+            if (dbFile.exists())
             {
-            	mainWarehouseFile.delete();
+                dbFile.delete();
             }
             
-            mainWarehouseFile.createNewFile();
-            FileWriter dbWriter = new FileWriter(mainWarehouseFile);
+            dbFile.createNewFile();
+            FileWriter dbWriter = new FileWriter(dbFile);
             
-            for(BikePart part : mainWarehouse.getInventory())
+            for(BikePart part : warehouse)
             {
                 dbWriter.write(part.toString() + "\n");
             }
@@ -355,54 +301,16 @@ public class Main
         }
         catch(FileNotFoundException e)
         {
-            System.err.println("Warehouse database file couldn't be created! "
-            		+ "Data will be lost!");
+            System.err.println("Database file couldn't be created! Data will be lost!");
             e.printStackTrace();
+            System.exit(1);
         }
         catch(IOException e)
         {
-            System.err.println("Couldn't write to the warehouse database file, "
-            		+ "data will be lost!");
+            System.err.println("Couldn't write to database file, data will be lost!");
             e.printStackTrace();
+            System.exit(1);
         }
-    	
-    	//Create database files for the vans. ENSURE NO 2 VANS HAVE THE SAME NAME
-    	for (int i = 0; i < vans.size(); i++)
-    	{
-    		Warehouse curVan = vans.get(i);
-    		File vanFile = new File(curVan.getName() + FILE_MODIFIER);
-        	try
-            {
-                if (vanFile.exists())
-                {
-                	vanFile.delete();
-                }
-                
-                vanFile.createNewFile();
-                FileWriter vanWriter = new FileWriter(vanFile);
-                
-                for(BikePart part : curVan.getInventory())
-                {
-                	vanWriter.write(part.toString() + "\n");
-                }
-                
-                vanWriter.close();
-            }
-            catch(FileNotFoundException e)
-            {
-                System.err.println("Van " + curVan.getName() +" database file "
-                		+ "couldn't be created! Data will be lost!");
-                e.printStackTrace();
-            }
-            catch(IOException e)
-            {
-                System.err.println("Couldn't write to van " + curVan.getName() + 
-                		" database file, data will be lost!");
-                e.printStackTrace();
-            }
-    	}
-    	
-    	run = false;
     }
 
     /**
@@ -410,7 +318,7 @@ public class Main
      */
     private void displayUI()
     {
-    	// Print out user options
+        // Print out user options
         System.out.println(
                 "Please select your option from the following menu:\n" + 
                 "Read: Read an inventory delivery file\n" + 
@@ -419,8 +327,6 @@ public class Main
                 "Display: Display a part\n" + 
                 "SortName: Sort parts by part name\n" + 
                 "SortNumber: Sort parts by part number\n" + 
-                "AddVan: Add a new sales van to the fleet\n" +
-                "Transfer: Read a inventory transfer file\n" +
                 "Quit: Close the program\n" + 
                 "Enter your choice:"
                 );
@@ -458,14 +364,8 @@ public class Main
             sortNumber();
             break;
         case 6:
-            addVan();
+            quit();
             break;
-        case 7: 
-        	transfer();
-        	break;
-        case 8:
-        	quit();
-        	break;
         default:
             System.out.println("That didn't match any option, please try again.");
             break;
