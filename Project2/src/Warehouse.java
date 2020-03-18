@@ -1,3 +1,8 @@
+/**
+ * Represents a Warehouse that holds BikeParts.
+ * I hereby declare upon my word of honor that I have neither given nor received unauthorized help on this work.
+ * @author Group7
+ */
 import java.util.ArrayList;
 
 public class Warehouse 
@@ -81,7 +86,7 @@ public class Warehouse
 		for (BikePart curPart : requestedParts)
 		{
 			BikePart partToAdd = new BikePart(curPart.getName(), curPart.getNumber(),
-					curPart.getListPrice(), curPart.getSalesPrice(), curPart.getSale(), -1);
+					curPart.getListPrice(), curPart.getSalesPrice(), curPart.getSale(), 0);
 			
 			for (BikePart matchedPart : inventory)
 			{
@@ -89,8 +94,13 @@ public class Warehouse
 				{
 					//TODO find out what we should do if there are not enough parts
 					//to meet the request
+					partToAdd.setNumber(matchedPart.getNumber());
+					partToAdd.setListPrice(matchedPart.getListPrice());
+					partToAdd.setSalesPrice(matchedPart.getSalesPrice());
+					partToAdd.setSale(matchedPart.getSale());
 					
 					partToAdd.setQuantity(Math.min(curPart.getQuantity(), matchedPart.getQuantity()));
+					matchedPart.setQuantity(matchedPart.getQuantity() - partToAdd.getQuantity());
 				}
 			}
 			
@@ -133,6 +143,27 @@ public class Warehouse
 	    }
 	    
 	    return returnParts;
+	}
+	
+	/**
+	 * Return a copy of a bike part by name. Return null if a part cannot be found.
+	 * @param name name of the part to be found.
+	 * @return The part with the name, null if a part cannot be found.
+	 */
+	public BikePart findPart(String name)
+	{
+	    for (BikePart curPart : inventory)
+	    {
+	        if (curPart.getName().equals(name))
+	        {
+	            BikePart foundPart = new BikePart(curPart.getName(), curPart.getNumber(),
+	                    curPart.getListPrice(), curPart.getSalesPrice(), curPart.getSale(), -1);
+	            
+	            return foundPart;
+	        }
+	    }
+	    
+	    return null;
 	}
 	
 	/**

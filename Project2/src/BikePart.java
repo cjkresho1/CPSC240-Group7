@@ -1,5 +1,6 @@
 /**
  * Holds the information important to a Bike Part
+ * I hereby declare upon my word of honor that I have neither given nor received unauthorized help on this work.
  * @author Group7
  */
 public class BikePart
