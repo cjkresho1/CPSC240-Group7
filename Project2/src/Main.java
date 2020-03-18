@@ -552,8 +552,8 @@ public class Main
         
         System.out.println("Part Name: " + foundPart.getName());
         System.out.println("Number: " + foundPart.getNumber());
-        System.out.println("List Price: " + foundPart.getListPrice());
-        System.out.println("Sale Price: " + foundPart.getSalesPrice());
+        System.out.printf("List Price: %.2d", foundPart.getListPrice());
+        System.out.printf("Sale Price: %.2d", foundPart.getSalesPrice());
         if (foundPart.getSale())
         {
             System.out.println("This part is on sale!");

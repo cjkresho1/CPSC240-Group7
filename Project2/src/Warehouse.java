@@ -157,7 +157,7 @@ public class Warehouse
 	        if (curPart.getName().equals(name))
 	        {
 	            BikePart foundPart = new BikePart(curPart.getName(), curPart.getNumber(),
-	                    curPart.getListPrice(), curPart.getSalesPrice(), curPart.getSale(), -1);
+	                    curPart.getListPrice(), curPart.getSalesPrice(), curPart.getSale(), curPart.getQuantity());
 	            
 	            return foundPart;
 	        }
