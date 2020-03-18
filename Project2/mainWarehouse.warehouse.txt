@@ -1,3 +1,0 @@
-WTB_saddle,1234567890,33.00,25.58,false,10
-newSaddle,987654321,66.00,25.00,true,22
-carbonHandleBars42cm,444444,50.00,1.00,false,1

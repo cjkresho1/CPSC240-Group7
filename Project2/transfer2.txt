@@ -1,0 +1,4 @@
+mainWarehouse,SalesVanP
+BikeSeat,8
+BikeHandle,30
+BikeLight,45

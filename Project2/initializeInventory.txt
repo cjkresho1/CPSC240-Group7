@@ -1,0 +1,7 @@
+BikeSeat,1111,20.00,10.00,false,15
+BikeHandle,2222,19.99,9.99,true,30
+BikeLight,3333,50.00,25.00,false,40
+BikeOther,4444,75.00,43.21,false,4
+BikeLast,5555,100.00,89.99,true,99
+SellMePart,6666,6.00,2.00,false,10
+SellMeSalePart,7777,6.00,2.00,true,10
