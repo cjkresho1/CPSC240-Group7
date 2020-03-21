@@ -1,7 +1,7 @@
 /**
  * Represents a Warehouse that holds BikeParts.
  * I hereby declare upon my word of honor that I have neither given nor received unauthorized help on this work.
- * @author Group7
+ * @author Charles Kresho, Mary Wells, Anna Totten
  */
 import java.util.ArrayList;
 

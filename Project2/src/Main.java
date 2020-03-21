@@ -11,7 +11,7 @@ import java.util.Scanner;
  * Provides the main control structure for the project. Contains the main Warehouse
  * and a list of Van Warehouses, and handles all user I/O.
  * I hereby declare upon my word of honor that I have neither given nor received unauthorized help on this work.
- * @author Charles, Libbie, Anna Totten
+ * @author Charles Kresho, Mary Wells, Anna Totten
  *
  */
 public class Main
